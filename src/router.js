@@ -4,7 +4,153 @@ import { getAllBooks, getBookById, createBook, updateBook, deleteBook } from './
 
 const router = Router();
 
-// --- AUTHOR ENDPOINTS ---
+// ==========================================
+// 📚 BOOKS ENDPOINTS
+// ==========================================
+
+/**
+ * @openapi
+ * /books:
+ *   get:
+ *     summary: Get all books
+ *     tags:
+ *       - Books
+ *     responses:
+ *       200:
+ *         description: Success
+ *       500:
+ *         description: Server error
+ */
+router.get('/books', getAllBooks);
+
+/**
+ * @openapi
+ * /books/{id}:
+ *   get:
+ *     summary: Get one book by id
+ *     tags:
+ *       - Books
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: Success
+ *       404:
+ *         description: Not found
+ */
+router.get('/books/:id', getBookById);
+
+/**
+ * @openapi
+ * /books:
+ *   post:
+ *     summary: Create a new book
+ *     tags:
+ *       - Books
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - id
+ *               - authorId
+ *               - title
+ *               - publicationDate
+ *             properties:
+ *               id:
+ *                 type: string
+ *               authorId:
+ *                 type: string
+ *               title:
+ *                 type: string
+ *               publicationDate:
+ *                 type: string
+ *           example:
+ *             id: b4
+ *             authorId: a1
+ *             title: Example Book Title
+ *             publicationDate: "2026-01-15"
+ *     responses:
+ *       201:
+ *         description: Created
+ *       400:
+ *         description: Bad request
+ */
+router.post('/books', createBook);
+
+/**
+ * @openapi
+ * /books/{id}:
+ *   put:
+ *     summary: Update an existing book
+ *     tags:
+ *       - Books
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - authorId
+ *               - title
+ *               - publicationDate
+ *             properties:
+ *               authorId:
+ *                 type: string
+ *               title:
+ *                 type: string
+ *               publicationDate:
+ *                 type: string
+ *           example:
+ *             authorId: a2
+ *             title: Updated Book Title
+ *             publicationDate: "2026-02-20"
+ *     responses:
+ *       200:
+ *         description: Updated
+ *       404:
+ *         description: Not found
+ */
+router.put('/books/:id', updateBook);
+
+/**
+ * @openapi
+ * /books/{id}:
+ *   delete:
+ *     summary: Delete an existing book
+ *     tags:
+ *       - Books
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *     responses:
+ *       204:
+ *         description: Deleted
+ *       404:
+ *         description: Not found
+ */
+router.delete('/books/:id', deleteBook);
+
+
+// ==========================================
+// 👥 AUTHORS ENDPOINTS
+// ==========================================
 
 /**
  * @openapi
@@ -15,9 +161,7 @@ const router = Router();
  *       - Authors
  *     responses:
  *       200:
- *         description: A list of authors
- *       500:
- *         description: Unable to retrieve authors
+ *         description: Success
  */
 router.get('/authors', getAllAuthors);
 
@@ -36,11 +180,9 @@ router.get('/authors', getAllAuthors);
  *           type: string
  *     responses:
  *       200:
- *         description: Author found
+ *         description: Success
  *       404:
- *         description: Author not found
- *       500:
- *         description: Unable to retrieve author
+ *         description: Not found
  */
 router.get('/authors/:id', getAuthorById);
 
@@ -68,13 +210,13 @@ router.get('/authors/:id', getAuthorById);
  *                 type: string
  *               birthYear:
  *                 type: number
+ *           example:
+ *             id: a4
+ *             name: Example Author
+ *             birthYear: 1980
  *     responses:
  *       201:
- *         description: Author created successfully
- *       400:
- *         description: Missing fields or ID collision
- *       500:
- *         description: Unable to create author
+ *         description: Created
  */
 router.post('/authors', createAuthor);
 
@@ -105,13 +247,12 @@ router.post('/authors', createAuthor);
  *                 type: string
  *               birthYear:
  *                 type: number
+ *           example:
+ *             name: Updated Author
+ *             birthYear: 1981
  *     responses:
  *       200:
- *         description: Author updated successfully
- *       404:
- *         description: Author not found
- *       500:
- *         description: Unable to update author
+ *         description: Updated
  */
 router.put('/authors/:id', updateAuthor);
 
@@ -130,21 +271,10 @@ router.put('/authors/:id', updateAuthor);
  *           type: string
  *     responses:
  *       204:
- *         description: Deleted successfully
+ *         description: Deleted
  *       409:
- *         description: Author has books
- *       404:
- *         description: Author not found
- *       500:
- *         description: Unable to delete author
+ *         description: Relational block active
  */
 router.delete('/authors/:id', deleteAuthor);
-
-// --- BOOKS ENDPOINTS ---
-router.get('/books', getAllBooks);
-router.get('/books/:id', getBookById);
-router.post('/books', createBook);
-router.put('/books/:id', updateBook);
-router.delete('/books/:id', deleteBook);
 
 export default router;
