@@ -16,11 +16,8 @@ const options = {
       }
     ]
   },
-  // We explicitly name the exact file paths here so the tool doesn't miss them
-  apis: [
-    './app.js',
-    './src/router.js'
-  ]
+  // We only scan the router files from here without importing them directly
+  apis: ['./app.js', './src/router.js', './src/**/*.js']
 };
 
 const swaggerSpec = swaggerJsdoc(options);
